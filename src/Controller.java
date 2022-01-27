@@ -3,6 +3,8 @@ public class Controller {
         char key = '(';
         String message = "HEJ";
         Model model = new Model();
-        model.encrypt(message, key);
+        System.out.println(model.encrypt(message, key));
+        model.save(model.encrypt(message, key),"encrypted.bin");
+        System.out.println(model.load("encrypted.bin"));
     }
 }
