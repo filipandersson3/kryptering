@@ -1,15 +1,25 @@
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Model {
     public ArrayList<Byte> encrypt(String message, char key) {
         ArrayList<Byte> encrypted = new ArrayList<Byte>();
         byte[] encryptedchar = null;
         for (int i = 0; i < message.length(); i++) {
+            int byteCount = 0;
             encryptedchar = ByteBuffer.allocate(4).putInt(message.charAt(i) ^ key).array();
             for (byte b : encryptedchar) {
-                encrypted.add(b);
+                if (byteCount > 2) {
+                    encrypted.add(b);
+                    if (byteCount == 4) {
+                        byteCount = 0;
+                    }
+                }
+                byteCount++;
             }
         }
         return encrypted;
@@ -35,21 +45,21 @@ public class Model {
         }
     }
 
-    public String load(String filename) {
-        DataInputStream binIn = null;
+    public byte[] load(String filename) {
+        byte[] encryptedString = new byte[0];
         try {
-            binIn = new DataInputStream(new BufferedInputStream(new FileInputStream(filename)));
-        } catch (FileNotFoundException e) {
+            encryptedString = Files.readAllBytes(Paths.get(filename));
+        } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
         }
-        int byteInt;
-        String encryptedString = "";
-        try {
-            while ((byteInt = binIn.readByte()) != -1) {
-                encryptedString += binIn.readByte();
-            }
-        } catch (IOException ignored) {}
         return encryptedString;
+    }
+
+    public String decrypt(byte[] load, char key) {
+        String decrypted = "";
+        for (int i = 0; i < load.length; i++) {
+            decrypted += (char)(load[i]^key);
+        }
+        return decrypted;
     }
 }
