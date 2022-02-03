@@ -34,18 +34,24 @@ public class Controller {
     private class SaveAL implements ActionListener { //Save file
         @Override
         public void actionPerformed(ActionEvent e) {
-            String result = view.getFilename();
-            if (!result.equals("")) {
-                model.save(model.encrypt(view.getTextArea1().getText(),'('), result);
+            String key = view.getKey();
+            if (key != null) {
+                String result = view.getFilename();
+                if (!result.equals("")) {
+                    model.save(model.encrypt(view.getTextArea1().getText(),key), result);
+                }
             }
         }
     }
     private class SaveAsAL implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            String result = view.getNewFilename();
-            if (!result.equals("")) {
-                model.save(model.encrypt(view.getTextArea1().getText(),'('), result);
+            String key = view.getKey();
+            if (key != null) {
+                String result = view.getNewFilename();
+                if (!result.equals("")) {
+                    model.save(model.encrypt(view.getTextArea1().getText(),key), result);
+                }
             }
         }
     }
@@ -54,7 +60,10 @@ public class Controller {
         public void actionPerformed(ActionEvent actionEvent) {
             String result = view.getNewFilename();
             if (!result.equals("")) {
-                view.getTextArea1().setText(model.decrypt(model.load(result),'('));
+                String key = view.getKey();
+                if (key != null) {
+                    view.getTextArea1().setText(model.decrypt(model.load(result),key));
+                }
             }
         }
     }

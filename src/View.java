@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -84,6 +85,18 @@ public class View {
             filename = fc.getSelectedFile().getAbsolutePath();
             return filename;
         }
+    }
+
+    public String getKey() {
+        String result = "";
+        try {
+            while (result.equals("")) {
+                result = JOptionPane.showInputDialog(null, "Enter key");
+            }
+        } catch (NullPointerException e) {
+            return null;
+        }
+        return result;
     }
 
     public void setFilename(String filename) {
